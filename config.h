@@ -329,9 +329,6 @@
 /* Define to the type of arg 5 for `select'. */
 #define SELECT_TYPE_ARG5 (struct timeval *)
 
-/* Define to 1 if the `setpgrp' function takes no argument. */
-/* #undef SETPGRP_VOID */
-
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 

@@ -1,2 +1,8 @@
 *.swp
 *.Po
+config.log
+autom4te.cache/*
+*.o
+*~
+src/netperf
+src/netserver

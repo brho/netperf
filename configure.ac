@@ -64,7 +64,8 @@ AC_DECL_H_ERRNO
 AC_STRUCT_SOCKADDR_STORAGE
 AC_HEADER_TIME
 AC_HEADER_STDBOOL
-AC_CHECK_SA_LEN(ac_cv_sockaddr_has_sa_len)
+# busted on akaros
+#AC_CHECK_SA_LEN(ac_cv_sockaddr_has_sa_len)
 
 # Checks for library functions.
 # AC_FUNC_ERROR_AT_LINE
@@ -72,7 +73,8 @@ AC_FUNC_FORK
 # AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_FUNC_SELECT_ARGTYPES
-AC_FUNC_SETPGRP
+# busted
+# AC_FUNC_SETPGRP
 AC_TYPE_SIGNAL
 # AC_FUNC_STAT
 # remove pstat_getdynamic (at least for now) since we don't do
