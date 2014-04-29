@@ -728,3 +728,6 @@ extern HANDLE WinTimer;
 #ifdef USE_PERFSTAT
 # include <libperfstat.h>
 #endif
+
+/* hack in the akaros uthread_sleep */
+unsigned int sleep(unsigned int sec);

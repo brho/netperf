@@ -6,3 +6,12 @@ autom4te.cache/*
 *~
 src/netperf
 src/netserver
+
+Makefile
+config.h
+config.status
+doc/Makefile
+doc/examples/Makefile
+src/Makefile
+src/missing/Makefile
+src/missing/m4/Makefile

@@ -1256,9 +1256,12 @@ accept_connections() {
   }
 
   while (1) {
-
+/* No select on Akaros yet */
+#if 0 
     FD_ZERO(&write_fds);
     FD_ZERO(&except_fds);
+	// XXX want a listen_list of one thing
+	// then we just poll that one FD
     high_fd = set_fdset(listen_list,&read_fds);
 
 #if !defined(WIN32)
@@ -1285,6 +1288,7 @@ accept_connections() {
     candidate = 0;
     while ((num_ready) && (candidate <= high_fd)) {
       if (FD_ISSET(candidate,&read_fds)) {
+
 	accept_connection(candidate);
 	FD_CLR(candidate,&read_fds);
 	num_ready--;
@@ -1293,6 +1297,11 @@ accept_connections() {
 	candidate++;
       }
     }
+#else
+	/* only handling the first listener for now */
+	accept_connection(listen_list->fd);
+#endif
+
   }
 }
 

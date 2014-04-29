@@ -960,6 +960,18 @@ gettimeofday( struct timeval *tv , struct timezone *not_used )
 #endif /* WIN32 */
 
 
+
+/* Akaros version, pairs with start_timer() */
+/* Ghetto global awaiter, assuming one uthread. */
+#include <alarm.h>
+#include <uthread.h>
+struct alarm_waiter waiter;
+void stop_timer(void)
+{
+	unset_alarm(&waiter);
+}
+
+#if 0
  /* this routine will disable any running timer */
 void
 stop_timer()
@@ -974,6 +986,7 @@ stop_timer()
 #endif /* WIN32 */
 
 }
+#endif
 
 
 
@@ -1168,6 +1181,19 @@ emulate_alarm( int seconds )
 
 #endif /* WIN32 */
 
+/* Akaros version of start timer.  This will interrupt any pending syscall for
+ * this uthread.  waiter is a global, see above.  =( */
+void start_timer(int time)
+{
+	init_awaiter(&waiter, alarm_abort_sysc);
+	waiter.data = current_uthread;
+	set_awaiter_rel(&waiter, time * 1000000);
+	set_alarm(&waiter);
+}
+
+
+
+#if 0
 void
 start_timer(int time)
 {
@@ -1262,6 +1288,7 @@ if (debug) {
   test_len_ticks = 1;
 
 }
+#endif
 
 
 
@@ -2277,6 +2304,8 @@ shutdown_control()
      (which should not be happening, that we will receive the whole
      thing and not have a problem ;-) */
 
+// No select
+#if 0
   FD_ZERO(&readfds);
   FD_SET(netlib_control,&readfds);
   timeout.tv_sec  = 60; /* wait one minute then punt */
@@ -2294,6 +2323,7 @@ shutdown_control()
     fflush(where);
     exit(1);
   }
+#endif
 
   /* we now assume that the socket has come ready for reading */
   recv(netlib_control, buf, buflen,0);
@@ -2726,6 +2756,9 @@ recv_request_timed_n(int n, int seconds)
   timeout.tv_sec = seconds;
   timeout.tv_usec = 0;
   do {
+
+	// No select
+	#if 0
     FD_ZERO(&readfds);
     FD_SET(server_sock,&readfds);
     if (select(FD_SETSIZE,
@@ -2741,6 +2774,7 @@ recv_request_timed_n(int n, int seconds)
       close(server_sock);
       return -1;
     }
+	#endif
 
     if ((bytes_recvd = recv(server_sock, buf, bytes_left, 0)) > 0) {
       tot_bytes_recvd += bytes_recvd;
@@ -2885,6 +2919,8 @@ recv_response_timed_n(int addl_time, int n)
     response_array[counter] = 0;
   }
 
+  // No select
+  #if 0
   /* we only select once. it is assumed that if the response is split
      (which should not be happening, that we will receive the whole
      thing and not have a problem ;-) */
@@ -2916,6 +2952,7 @@ recv_response_timed_n(int addl_time, int n)
 	    counter);
     exit(1);
   }
+  #endif
 
   while ((tot_bytes_recvd != buflen) &&
 	 ((bytes_recvd = recv(netlib_control, buf, bytes_left,0)) > 0 )) {
@@ -3971,6 +4008,8 @@ calibrate_remote_cpu()
 int
 msec_sleep( int msecs )
 {
+// No select
+#if 0
   int           rval ;
 
   struct timeval timeout;
@@ -3988,6 +4027,9 @@ msec_sleep( int msecs )
     perror("msec_sleep: select");
     exit(1);
   }
+#else
+	uthread_sleep(msecs / 1000 + 1);
+#endif
   return(0);
 }
 #endif /* WIN32 */
@@ -5028,3 +5070,7 @@ display_confidence()
           100.0 * (interval - rem_cpu_confid));
 }
 
+unsigned int sleep(unsigned int sec)
+{
+	uthread_sleep(sec);
+}
