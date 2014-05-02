@@ -1,3 +1,3 @@
 Rather than deal with Config Hell, just build this for Linux with a few slight mods.
-export AKAROS=whatever
-./configure CC=x86_64-ros-gcc CFLAGS=-Dros --host x86_64-unknown-linux-gnu  enable_rtlookup=none enable_drvlookup=none enable_omni=no LIBS=$AKAROS/user/bsd/obj/libbsd.a
+
+./configure CC=x86_64-ros-gcc CFLAGS=-Dros --host x86_64-unknown-linux-gnu  enable_rtlookup=none enable_drvlookup=none enable_omni=no LIBS="-lbenchutil -lbsd"
