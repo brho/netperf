@@ -2077,7 +2077,7 @@ Size (bytes)\n\
 		   send_ring->buffer_ptr,
 		   send_size,
 		   0)) != send_size) {
-      if ((len >=0) || SOCKET_EINTR(len)) {
+      if (1 || (len >=0) || SOCKET_EINTR(len)) {
 	    /* the test was interrupted, must be the end of test */
 	    break;
 	  }

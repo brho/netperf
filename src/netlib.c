@@ -3141,6 +3141,7 @@ fprintf(where,"debug: %d\n",debug);
 void
 get_sock_buffer (SOCKET sd, enum sock_buffer which, int *effective_sizep)
 {
+#if 0
 #ifdef SO_SNDBUF
   int optname = (which == SEND_BUFFER) ? SO_SNDBUF : SO_RCVBUF;
   netperf_socklen_t sock_opt_len;
@@ -3164,6 +3165,10 @@ get_sock_buffer (SOCKET sd, enum sock_buffer which, int *effective_sizep)
 #else
   *effective_sizep = -1;
 #endif
+#else
+  *effective_sizep = 1024;
+#endif
+
 }
 
 void
