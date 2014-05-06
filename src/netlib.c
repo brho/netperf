@@ -1113,11 +1113,16 @@ void emulate_alarm(int seconds)
 
 #endif /* WIN32 */
 
-/* Akaros version of start timer.  This will interrupt any pending syscall for
- * this uthread.  waiter is a global, see above.  =( */
+static void alarm_times_up(struct alarm_waiter *awaiter)
+{
+	times_up = 1;
+}
+
+/* Akaros version of start timer.  This will trigger times_up, which is what we
+ * think the users of start_timer() wanted.  waiter is a global, see above. */
 void start_timer(int time)
 {
-	init_awaiter(&waiter, alarm_abort_sysc);
+	init_awaiter(&waiter, alarm_times_up);
 	waiter.data = current_uthread;
 	set_awaiter_rel(&waiter, time * 1000000);
 	set_alarm(&waiter);
