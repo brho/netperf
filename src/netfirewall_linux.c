@@ -19,69 +19,67 @@ static int port_was_enabled = 0;
 static int enabled_port = -1;
 static int enabled_protocol = -1;
 
-static char *protocol_to_ufw(int protocol) {
-  switch (protocol) {
-  case IPPROTO_TCP:
-    return("tcp");
-    break;
-  case IPPROTO_UDP:
-    return("udp");
-    break;
+static char *protocol_to_ufw(int protocol)
+{
+	switch (protocol) {
+		case IPPROTO_TCP:
+			return ("tcp");
+			break;
+		case IPPROTO_UDP:
+			return ("udp");
+			break;
 #if defined(IPPROTO_SCTP)
-  case IPPROTO_SCTP:
-    return("sctp");
-    break;
+		case IPPROTO_SCTP:
+			return ("sctp");
+			break;
 #endif
 #if defined(IPPROTO_DCCP)
-  case IPPROTO_DCCP:
-    return "dccp";
-    break;
+		case IPPROTO_DCCP:
+			return "dccp";
+			break;
 #endif
 #if defined(IPPROTO_UDPLITE)
-  case IPPROTO_UDPLITE:
-    return "udplite";
-    break;
+		case IPPROTO_UDPLITE:
+			return "udplite";
+			break;
 #endif
-  default:
-    return("UNKNOWN");
-  }
+		default:
+			return ("UNKNOWN");
+	}
 }
 
-void
-enable_port(int port, int protocol) {
-  char command[128];
+void enable_port(int port, int protocol)
+{
+	char command[128];
 
-  if ((port < 0) || (port > 65535))
-    return;
-		     
-  /* one of these days we will have to learn the proper way to see if
-     a port is already open under Linux... */
-  sprintf(command,
-	  "ufw allow %d/%s 2>&1 > /dev/null",
-	  port,
-	  protocol_to_ufw(protocol));
-  if (system(command) < 0) {
-    /* if the command failed outright, don't bother at the back-end */
-    port_was_enabled = 0;
-  }
-  else {
-    port_was_enabled = 1;
-    enabled_port = port;
-    enabled_protocol = protocol;
-  }
-  return;
+	if ((port < 0) || (port > 65535))
+		return;
+
+	/* one of these days we will have to learn the proper way to see if
+	   a port is already open under Linux... */
+	sprintf(command,
+			"ufw allow %d/%s 2>&1 > /dev/null",
+			port, protocol_to_ufw(protocol));
+	if (system(command) < 0) {
+		/* if the command failed outright, don't bother at the back-end */
+		port_was_enabled = 0;
+	} else {
+		port_was_enabled = 1;
+		enabled_port = port;
+		enabled_protocol = protocol;
+	}
+	return;
 }
 
-void
-done_with_port(int port, int protocol) {
-  char command[128];
+void done_with_port(int port, int protocol)
+{
+	char command[128];
 
-  if (port_was_enabled) {
-    sprintf(command,
-	    "ufw delete allow %d/%s 2>&1 > /dev/null",
-	    enabled_port,
-	    protocol_to_ufw(enabled_protocol));
-    system(command);
-  }
-  return;
+	if (port_was_enabled) {
+		sprintf(command,
+				"ufw delete allow %d/%s 2>&1 > /dev/null",
+				enabled_port, protocol_to_ufw(enabled_protocol));
+		system(command);
+	}
+	return;
 }

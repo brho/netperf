@@ -7,22 +7,22 @@
 #endif
 
 #if defined(HAVE_SYS_SOCKET_H)
-# include <sys/socket.h>
+#include <sys/socket.h>
 #endif
 #if defined(HAVE_NETDB_H)
-# include <netdb.h>
+#include <netdb.h>
 #endif
 #if !defined(HAVE_GETADDRINFO) || !defined(HAVE_GETNAMEINFO)
-# include "missing/getaddrinfo.h"
+#include "missing/getaddrinfo.h"
 #endif
 
 #define PAD_TIME 4
 /* library routine specifc defines                                      */
-#define         MAXSPECDATA     162     /* how many ints worth of data  */
-                                        /* can tests send...            */
-#define         MAXTIMES        4       /* how many times may we loop   */
-                                        /* to calibrate                 */
-#define         MAXCPUS         256     /* how many CPU's can we track */
+#define         MAXSPECDATA     162	/* how many ints worth of data  */
+										/* can tests send...            */
+#define         MAXTIMES        4	/* how many times may we loop   */
+										/* to calibrate                 */
+#define         MAXCPUS         256	/* how many CPU's can we track */
 #define         MAXMESSAGESIZE  65536
 #define         MAXALIGNMENT    16384
 #define         MAXOFFSET        4096
@@ -230,26 +230,26 @@
 #define         SYSINFO_RESPONSE           601
 
 #if HAVE_INTTYPES_H
-# include <inttypes.h>
+#include <inttypes.h>
 #else
-# if HAVE_STDINT_H
-#  include <stdint.h>
+#if HAVE_STDINT_H
+#include <stdint.h>
 #else
-# ifdef WIN32
-#  include "missing\inttypes.h"
-# endif
-# endif
+#ifdef WIN32
+#include "missing\inttypes.h"
+#endif
+#endif
 #endif
 
-enum sock_buffer{
-  SEND_BUFFER,
-  RECV_BUFFER
+enum sock_buffer {
+	SEND_BUFFER,
+	RECV_BUFFER
 };
 
 enum netperf_output_modes {
-  HUMAN = 0,
-  CSV,
-  KEYVAL,
+	HUMAN = 0,
+	CSV,
+	KEYVAL,
 };
 
 /* some defines for security types, perhaps these would be better
@@ -273,46 +273,46 @@ enum netperf_output_modes {
  /* stated goal of netperf. raj 11/95 */
 
 union netperf_request_struct {
-  struct {
-    int     request_type;
-    int     dummy;
-    int     test_specific_data[MAXSPECDATA];
-  } content;
-  double dummy;
+	struct {
+		int request_type;
+		int dummy;
+		int test_specific_data[MAXSPECDATA];
+	} content;
+	double dummy;
 };
 
 union netperf_response_struct {
-  struct {
-    int response_type;
-    int serv_errno;
-    int test_specific_data[MAXSPECDATA];
-  } content;
-  double dummy;
+	struct {
+		int response_type;
+		int serv_errno;
+		int test_specific_data[MAXSPECDATA];
+	} content;
+	double dummy;
 };
 
 struct ring_elt {
-  struct ring_elt *next;  /* next element in the ring */
-  char *buffer_base;      /* in case we have to free it at somepoint */
-  char *buffer_ptr;       /* the aligned and offset pointer */
-  void *completion_ptr;   /* a pointer to information for async completion */
-  /* these are for sendfile calls and at some point we should consider
-     using a union but it isn't really all that much extra space */
-  struct iovec *hdtrl;            /* a pointer to a header/trailer
-				     that we do not initially use and
-				     so should be set to NULL when the 
-				     ring is setup. */
-  off_t offset;                   /* the offset from the beginning of
-				     the file for this send */
-  size_t length;                  /* the number of bytes to send -
-				     this is redundant with the
-				     send_size variable but I decided
-				     to include it anyway */
-  int fildes;                     /* the file descriptor of the source
-				     file */ 
-  int flags;                      /* the flags to pass to sendfile() - 
-				     presently unused and should be
-				     set to zero when the ring is
-				     setup. */
+	struct ring_elt *next;		/* next element in the ring */
+	char *buffer_base;			/* in case we have to free it at somepoint */
+	char *buffer_ptr;			/* the aligned and offset pointer */
+	void *completion_ptr;		/* a pointer to information for async completion */
+	/* these are for sendfile calls and at some point we should consider
+	   using a union but it isn't really all that much extra space */
+	struct iovec *hdtrl;		/* a pointer to a header/trailer
+								   that we do not initially use and
+								   so should be set to NULL when the 
+								   ring is setup. */
+	off_t offset;				/* the offset from the beginning of
+								   the file for this send */
+	size_t length;				/* the number of bytes to send -
+								   this is redundant with the
+								   send_size variable but I decided
+								   to include it anyway */
+	int fildes;					/* the file descriptor of the source
+								   file */
+	int flags;					/* the flags to pass to sendfile() - 
+								   presently unused and should be
+								   set to zero when the ring is
+								   setup. */
 };
 
 /* +*+ SAF  Sorry about the hacks with errno; NT made me do it :(
@@ -338,7 +338,6 @@ struct ring_elt {
  XENIX errors that errno covers.  So on NT this is redefined to be
  Perror and it expands all GetLastError texts. */
 
-
 #ifdef WIN32
 /* INVALID_SOCKET == INVALID_HANDLE_VALUE == (unsigned int)(~0) */
 /* SOCKET_ERROR == -1 */
@@ -363,7 +362,7 @@ struct ring_elt {
 #define perror(text) PrintWin32Error(stderr, (text))
 #define Print_errno(stream, text) PrintWin32Error((stream), (text))
 
-extern void PrintWin32Error(FILE *stream, LPSTR text);
+extern void PrintWin32Error(FILE * stream, LPSTR text);
 
 #if !defined(NT_PERF) && !defined(USE_LOOPER)
 #define NT_PERF
@@ -446,17 +445,17 @@ extern void PrintWin32Error(FILE *stream, LPSTR text);
 
 int getopt(int argc, char **argv, char *optstring);
 
-extern char *optarg;		/* returned arg to go with this option */
-extern int optind;		/* index to next argv element to process */
-extern int opterr;		/* should error messages be printed? */
-extern int optopt;		/* */
+extern char *optarg;			/* returned arg to go with this option */
+extern int optind;				/* index to next argv element to process */
+extern int opterr;				/* should error messages be printed? */
+extern int optopt;				/* */
 
 #endif /* _GETOPT_ */
 
-extern  SOCKET     win_kludge_socket, win_kludge_socket2;
+extern SOCKET win_kludge_socket, win_kludge_socket2;
 #endif /* WIN32 */
 
-extern  int   local_proc_affinity, remote_proc_affinity;
+extern int local_proc_affinity, remote_proc_affinity;
 
 /* these are to allow netperf to be run easily through those evil,
    end-to-end breaking things known as firewalls */
@@ -475,172 +474,165 @@ extern int local_data_family;
 extern int remote_data_family;
 extern int control_family;
 
-extern  union netperf_request_struct netperf_request;
-extern  union netperf_response_struct netperf_response;
+extern union netperf_request_struct netperf_request;
+extern union netperf_response_struct netperf_response;
 
-extern  float    lib_local_cpu_util;
-extern  float    lib_elapsed;
-extern  float    lib_local_maxrate;
-extern  double   lib_local_peak_cpu_util;
-extern  int      lib_local_peak_cpu_id;
-extern  double   lib_remote_peak_cpu_util;
-extern  int      lib_remote_peak_cpu_id;
+extern float lib_local_cpu_util;
+extern float lib_elapsed;
+extern float lib_local_maxrate;
+extern double lib_local_peak_cpu_util;
+extern int lib_local_peak_cpu_id;
+extern double lib_remote_peak_cpu_util;
+extern int lib_remote_peak_cpu_id;
 
-extern  char    libfmt;
+extern char libfmt;
 
-extern  int     cpu_method;
-extern  int     lib_num_loc_cpus;
-extern  int     lib_num_rem_cpus;
-extern  SOCKET  server_sock;
-extern  int     times_up;
-extern  FILE    *where;
-extern  int     loops_per_msec;
-extern  float   lib_local_per_cpu_util[];
+extern int cpu_method;
+extern int lib_num_loc_cpus;
+extern int lib_num_rem_cpus;
+extern SOCKET server_sock;
+extern int times_up;
+extern FILE *where;
+extern int loops_per_msec;
+extern float lib_local_per_cpu_util[];
 
 extern enum netperf_output_modes netperf_output_mode;
 
 #if defined(WANT_INTERVALS) || defined(WANT_DEMO)
 
-extern int    demo_mode;
+extern int demo_mode;
 extern double demo_interval;
 extern double demo_units;
 extern double units_this_tick;
 #if defined(WANT_DEMO)
-extern void   demo_rr_interval(uint32_t units);
-extern void   demo_rr_setup(uint32_t units);
-extern void   demo_stream_interval(uint32_t units);
-extern void   demo_interval_tick(uint32_t units);
-extern void   demo_interval_final();
+extern void demo_rr_interval(uint32_t units);
+extern void demo_rr_setup(uint32_t units);
+extern void demo_stream_interval(uint32_t units);
+extern void demo_interval_tick(uint32_t units);
+extern void demo_interval_final();
 #endif
-#endif 
-  
-extern  void    netlib_init();
-extern  int     netlib_get_page_size();
-extern  void    install_signal_catchers();
-extern  struct addrinfo *resolve_host(char hostname[], 
-				      char port[], 
-				      int af);
-extern  void    establish_control(char hostname[], 
-				  char port[], 
-				  int af,
-				  char local_hostname[],
-				  char local_port[],
-				  int local_af);
-extern  void    shutdown_control();
-extern  void    init_stat();
-extern  void    send_request();
-extern  void    recv_response();
-extern  void    send_response();
-extern  int     recv_request();
-extern  int     recv_request_timed_n(int n, int seconds);
-extern  void    send_request_n(int n);  /* convert only the first N ints */
-extern  void    recv_response_n(int n); /* of the test-specific data via */
-extern  void    send_response_n(int n); /* htonl/ntonl as required */
-extern  int     recv_request_n(int n);
-extern  void    fixup_request_n(int n);
-extern  void    dump_request();
-extern  void    dump_addrinfo(FILE *dumploc, struct addrinfo *info,
-			      char *host, char *port, int family);
-extern  void    start_timer(int time);
-extern  void    stop_timer();
-extern  void    cpu_start(int measure_cpu);
-extern  void    cpu_stop(int measure_cpu, float *elapsed);
-extern  void	calculate_confidence(int confidence_iterations,
-		     float time,
-		     double result,
-		     float loc_cpu,
-		     float rem_cpu,
-		     float loc_sd,
-		     float rem_sd);
-extern  void	retrieve_confident_values(float *elapsed_time,
-			  double *thruput,
-			  float *local_cpu_utilization,
-			  float *remote_cpu_utilization,
-			  float *local_service_demand,
-			  float *remote_service_demand);
-extern  double  get_result_confid();
-extern  double  get_loc_cpu_confid();
-extern  double  get_rem_cpu_confid();
-extern  void    display_confidence();
-extern  void    get_sock_buffer(SOCKET sd,
-				enum sock_buffer which,
-				int *effective_sizep);
-extern  void    set_sock_buffer(SOCKET sd,
-				enum sock_buffer which,
-				int requested_size,
-				int *effective_sizep);
-extern  char   *format_units();
+#endif
 
-extern  void    get_remote_system_info();
+extern void netlib_init();
+extern int netlib_get_page_size();
+extern void install_signal_catchers();
+extern struct addrinfo *resolve_host(char hostname[], char port[], int af);
+extern void establish_control(char hostname[],
+							  char port[],
+							  int af,
+							  char local_hostname[],
+							  char local_port[], int local_af);
+extern void shutdown_control();
+extern void init_stat();
+extern void send_request();
+extern void recv_response();
+extern void send_response();
+extern int recv_request();
+extern int recv_request_timed_n(int n, int seconds);
+extern void send_request_n(int n);	/* convert only the first N ints */
+extern void recv_response_n(int n);	/* of the test-specific data via */
+extern void send_response_n(int n);	/* htonl/ntonl as required */
+extern int recv_request_n(int n);
+extern void fixup_request_n(int n);
+extern void dump_request();
+extern void dump_addrinfo(FILE * dumploc, struct addrinfo *info,
+						  char *host, char *port, int family);
+extern void start_timer(int time);
+extern void stop_timer();
+extern void cpu_start(int measure_cpu);
+extern void cpu_stop(int measure_cpu, float *elapsed);
+extern void calculate_confidence(int confidence_iterations,
+								 float time,
+								 double result,
+								 float loc_cpu,
+								 float rem_cpu, float loc_sd, float rem_sd);
+extern void retrieve_confident_values(float *elapsed_time,
+									  double *thruput,
+									  float *local_cpu_utilization,
+									  float *remote_cpu_utilization,
+									  float *local_service_demand,
+									  float *remote_service_demand);
+extern double get_result_confid();
+extern double get_loc_cpu_confid();
+extern double get_rem_cpu_confid();
+extern void display_confidence();
+extern void get_sock_buffer(SOCKET sd,
+							enum sock_buffer which, int *effective_sizep);
+extern void set_sock_buffer(SOCKET sd,
+							enum sock_buffer which,
+							int requested_size, int *effective_sizep);
+extern char *format_units();
 
-extern  char    *inet_ftos(int family);
-extern  char    *inet_ttos(int type);
-extern  char    *inet_ptos(int protocol);
-extern  char    *nsec_enabled_to_str(int enabled);
-extern  char    *nsec_type_to_str(int type);
-extern  double  ntohd(double net_double);
-extern  double  htond(double host_double);
-extern  int     inet_nton(int af, const void *src, char *dst, int cnt);
-extern  void    random_ip_address(struct addrinfo *res, int mask_len);
-extern  void    libmain();
-extern  double  calc_thruput(double units_received);
-extern  double  calc_thruput_interval(double units_received,double elapsed);
-extern  double  calc_thruput_omni(double units_received);
-extern  double  calc_thruput_interval_omni(double units_received,double elapsed);
-extern  float   calibrate_local_cpu(float local_cpu_rate);
-extern  float   calibrate_remote_cpu();
-extern  void    bind_to_specific_processor(int processor_affinity,int use_cpu_map);
-extern int      set_nonblock (SOCKET sock);
-extern char     *find_egress_interface(struct sockaddr *source, struct sockaddr *dest);
-extern char     *find_interface_slot(char *interface_name);
-extern void     find_interface_ids(char *interface_name, int *vendor, int *device, int *sub_vend, int *sub_dev);
-extern void     find_driver_info(char *ifname, char *driver, char *version, char *firmware, char *bus, int len);
-extern void     find_system_info(char **system_model, char **cpu_model, int *cpu_frequency);
-extern int      HIST_get_percentile();
-extern void     HIST_get_stats();
-extern void     HIST_purge();
-extern void     find_security_info(int *enabled, int *type, char **specific);
-extern void     demo_first_timestamp();
-extern void     demo_reset();
-extern void     demo_stream_setup(uint32_t a, uint32_t b);
-extern void     enable_port(int port, int protocol);
-extern void     done_with_port(int port, int protocol);
+extern void get_remote_system_info();
+
+extern char *inet_ftos(int family);
+extern char *inet_ttos(int type);
+extern char *inet_ptos(int protocol);
+extern char *nsec_enabled_to_str(int enabled);
+extern char *nsec_type_to_str(int type);
+extern double ntohd(double net_double);
+extern double htond(double host_double);
+extern int inet_nton(int af, const void *src, char *dst, int cnt);
+extern void random_ip_address(struct addrinfo *res, int mask_len);
+extern void libmain();
+extern double calc_thruput(double units_received);
+extern double calc_thruput_interval(double units_received, double elapsed);
+extern double calc_thruput_omni(double units_received);
+extern double calc_thruput_interval_omni(double units_received, double elapsed);
+extern float calibrate_local_cpu(float local_cpu_rate);
+extern float calibrate_remote_cpu();
+extern void bind_to_specific_processor(int processor_affinity, int use_cpu_map);
+extern int set_nonblock(SOCKET sock);
+extern char *find_egress_interface(struct sockaddr *source,
+								   struct sockaddr *dest);
+extern char *find_interface_slot(char *interface_name);
+extern void find_interface_ids(char *interface_name, int *vendor, int *device,
+							   int *sub_vend, int *sub_dev);
+extern void find_driver_info(char *ifname, char *driver, char *version,
+							 char *firmware, char *bus, int len);
+extern void find_system_info(char **system_model, char **cpu_model,
+							 int *cpu_frequency);
+extern int HIST_get_percentile();
+extern void HIST_get_stats();
+extern void HIST_purge();
+extern void find_security_info(int *enabled, int *type, char **specific);
+extern void demo_first_timestamp();
+extern void demo_reset();
+extern void demo_stream_setup(uint32_t a, uint32_t b);
+extern void enable_port(int port, int protocol);
+extern void done_with_port(int port, int protocol);
 #ifndef WIN32
 
 /* WIN32 requires that at least one of the file sets to select be
  non-null.  Since msec_sleep routine is only called by nettest_dlpi &
  nettest_unix, let's duck this issue. */
 
-extern int msec_sleep( int msecs );
-#endif  /* WIN32 */
-extern  float   calc_cpu_util(float elapsed_time);
-extern  float	calc_service_demand(double units_sent,
-				    float elapsed_time,
-				    float cpu_utilization,
-				    int num_cpus);
+extern int msec_sleep(int msecs);
+#endif /* WIN32 */
+extern float calc_cpu_util(float elapsed_time);
+extern float calc_service_demand(double units_sent,
+								 float elapsed_time,
+								 float cpu_utilization, int num_cpus);
 /* this one determines the unit divisor based on libfmt */
-extern  float	calc_service_demand_fmt(double units_sent,
-					float elapsed_time,
-					float cpu_utilization,
-					int num_cpus);
+extern float calc_service_demand_fmt(double units_sent,
+									 float elapsed_time,
+									 float cpu_utilization, int num_cpus);
 #if defined(__hpux)
-extern  void    catcher(int, siginfo_t *,void *);
+extern void catcher(int, siginfo_t *, void *);
 #else
-extern  void    catcher(int);
+extern void catcher(int);
 #endif /* __hpux */
-extern  struct ring_elt *allocate_buffer_ring();
+extern struct ring_elt *allocate_buffer_ring();
 extern void access_buffer(char *buffer_ptr,
-			  int length,
-			  int dirty_count,
-			  int clean_count);
+						  int length, int dirty_count, int clean_count);
 
 #ifdef HAVE_ICSC_EXS
-extern  struct ring_elt *allocate_exs_buffer_ring();
+extern struct ring_elt *allocate_exs_buffer_ring();
 #endif /* HAVE_ICSC_EXS */
 
 #ifdef HAVE_SENDFILE
-extern  struct ring_elt *alloc_sendfile_buf_ring();
-extern  int netperf_sendfile(SOCKET send_socket, struct ring_elt *send_ring);
+extern struct ring_elt *alloc_sendfile_buf_ring();
+extern int netperf_sendfile(SOCKET send_socket, struct ring_elt *send_ring);
 #endif /* HAVE_SENDFILE */
 
 #ifdef WANT_DLPI
@@ -650,9 +642,9 @@ extern  int netperf_sendfile(SOCKET send_socket, struct ring_elt *send_ring);
    Jones */
 extern int dl_connect(int fd, unsigned char *remote_addr, int remote_addr_len);
 extern int dl_bind(int fd, int sap, int mode, char *dlsap_ptr, int *dlsap_len);
-extern  int     dl_open(char devfile[], int ppa);
+extern int dl_open(char devfile[], int ppa);
 #endif /* WANT_DLPI */
-extern  char    format_cpu_method(int method);
+extern char format_cpu_method(int method);
 extern unsigned int convert(char *string);
 extern unsigned int convert_timespec(char *string);
 
@@ -726,7 +718,7 @@ extern HANDLE WinTimer;
 #endif /* HAVE_MIN */
 
 #ifdef USE_PERFSTAT
-# include <libperfstat.h>
+#include <libperfstat.h>
 #endif
 
 /* hack in the akaros uthread_sleep */

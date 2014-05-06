@@ -40,7 +40,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-     "@(#) $Header: /tcpdump/master/tcpdump/missing/inet_ntop.c,v 1.7 2003/11/16 09:36:50 guy Exp $";
+	"@(#) $Header: /tcpdump/master/tcpdump/missing/inet_ntop.c,v 1.7 2003/11/16 09:36:50 guy Exp $";
 #endif
 
 /* we aren't tcpdump :) */
@@ -56,12 +56,12 @@ static const char rcsid[] =
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#else   /* WIN32 */
+#else /* WIN32 */
 #include <time.h>
 #include <winsock2.h>
 #ifdef DO_IPV6
 #include <ws2tcpip.h>
-#endif  /* DO_IPV6 */
+#endif /* DO_IPV6 */
 #include <windows.h>
 
 /* The below are copied from netlib.h */
@@ -82,7 +82,7 @@ static const char rcsid[] =
 #define EAFNOSUPPORT  WSAEAFNOSUPPORT
 /* from public\sdk\inc\crt\errno.h */
 #define ENOSPC          28
-#endif  /* WIN32 */
+#endif /* WIN32 */
 
 /*
  *
@@ -92,49 +92,47 @@ static const char rcsid[] =
 #define INET_ADDRSTRLEN    16
 #endif
 
-static const char *
-inet_ntop_v4 (const void *src, char *dst, size_t size)
+static const char *inet_ntop_v4(const void *src, char *dst, size_t size)
 {
-    const char digits[] = "0123456789";
-    int i;
-    struct in_addr *addr = (struct in_addr *)src;
-    u_long a = ntohl(addr->s_addr);
-    const char *orig_dst = dst;
+	const char digits[] = "0123456789";
+	int i;
+	struct in_addr *addr = (struct in_addr *)src;
+	u_long a = ntohl(addr->s_addr);
+	const char *orig_dst = dst;
 
-    if (size < INET_ADDRSTRLEN) {
-      Set_errno(ENOSPC);
-      return NULL;
-    }
-    for (i = 0; i < 4; ++i) {
-	int n = (a >> (24 - i * 8)) & 0xFF;
-	int non_zerop = 0;
+	if (size < INET_ADDRSTRLEN) {
+		Set_errno(ENOSPC);
+		return NULL;
+	}
+	for (i = 0; i < 4; ++i) {
+		int n = (a >> (24 - i * 8)) & 0xFF;
+		int non_zerop = 0;
 
-	if (non_zerop || n / 100 > 0) {
-	    *dst++ = digits[n / 100];
-	    n %= 100;
-	    non_zerop = 1;
+		if (non_zerop || n / 100 > 0) {
+			*dst++ = digits[n / 100];
+			n %= 100;
+			non_zerop = 1;
+		}
+		if (non_zerop || n / 10 > 0) {
+			*dst++ = digits[n / 10];
+			n %= 10;
+			non_zerop = 1;
+		}
+		*dst++ = digits[n];
+		if (i != 3)
+			*dst++ = '.';
 	}
-	if (non_zerop || n / 10 > 0) {
-	    *dst++ = digits[n / 10];
-	    n %= 10;
-	    non_zerop = 1;
-	}
-	*dst++ = digits[n];
-	if (i != 3)
-	    *dst++ = '.';
-    }
-    *dst++ = '\0';
-    return orig_dst;
+	*dst++ = '\0';
+	return orig_dst;
 }
 
-const char *
-inet_ntop(int af, const void *src, char *dst, size_t size)
+const char *inet_ntop(int af, const void *src, char *dst, size_t size)
 {
-    switch (af) {
-    case AF_INET :
-	return inet_ntop_v4 (src, dst, size);
-    default :
-      Set_errno(EAFNOSUPPORT);
-      return NULL;
-    }
+	switch (af) {
+		case AF_INET:
+			return inet_ntop_v4(src, dst, size);
+		default:
+			Set_errno(EAFNOSUPPORT);
+			return NULL;
+	}
 }

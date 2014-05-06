@@ -1,15 +1,15 @@
 #if TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
+#include <sys/time.h>
+#include <time.h>
 #else
-# if HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
+#if HAVE_SYS_TIME_H
+#include <sys/time.h>
+#else
+#include <time.h>
+#endif
 #endif
 #ifdef WIN32
-#  include "missing\stdint.h"
+#include "missing\stdint.h"
 #endif
 
 /* hist.h
@@ -41,43 +41,43 @@
 #if defined(HAVE_GET_HRT)
 #include "hrt.h"
 #endif
-   
+
 #ifndef HIST_NUM_OF_BUCKET
 #define HIST_NUM_OF_BUCKET 100
 #endif
 
 struct histogram_struct {
-  int unit_usec[HIST_NUM_OF_BUCKET];
-  int ten_usec[HIST_NUM_OF_BUCKET];
-  int hundred_usec[HIST_NUM_OF_BUCKET];
-  int unit_msec[HIST_NUM_OF_BUCKET];
-  int ten_msec[HIST_NUM_OF_BUCKET];
-  int hundred_msec[HIST_NUM_OF_BUCKET];
-  int unit_sec[HIST_NUM_OF_BUCKET];
-  int ten_sec[HIST_NUM_OF_BUCKET];
-  int ridiculous;
-  int total;
-  int64_t sum;
-  double sumsquare;
-  int hmin;
-  int hmax;
-  int limit;
-  int count;
-  int producer;
-  int consumer;
+	int unit_usec[HIST_NUM_OF_BUCKET];
+	int ten_usec[HIST_NUM_OF_BUCKET];
+	int hundred_usec[HIST_NUM_OF_BUCKET];
+	int unit_msec[HIST_NUM_OF_BUCKET];
+	int ten_msec[HIST_NUM_OF_BUCKET];
+	int hundred_msec[HIST_NUM_OF_BUCKET];
+	int unit_sec[HIST_NUM_OF_BUCKET];
+	int ten_sec[HIST_NUM_OF_BUCKET];
+	int ridiculous;
+	int total;
+	int64_t sum;
+	double sumsquare;
+	int hmin;
+	int hmax;
+	int limit;
+	int count;
+	int producer;
+	int consumer;
 #ifdef HAVE_GETHRTIME
-  hrtime_t *time_ones;
-  hrtime_t time_two;
+	hrtime_t *time_ones;
+	hrtime_t time_two;
 #elif HAVE_GET_HRT
-  hrt_t *time_ones;
-  hrt_t time_two;
+	hrt_t *time_ones;
+	hrt_t time_two;
 #elif defined(WIN32)
-  LARGE_INTEGER *time_ones;
-  LARGE_INTEGER time_two;
+	LARGE_INTEGER *time_ones;
+	LARGE_INTEGER time_two;
 #else
-  struct timeval *time_ones;
-  struct timeval time_two;
-#endif /* HAVE_GETHRTIME */
+	struct timeval *time_ones;
+	struct timeval time_two;
+#endif							/* HAVE_GETHRTIME */
 
 };
 
@@ -87,7 +87,7 @@ typedef struct histogram_struct *HIST;
    HIST_new - return a new, cleared histogram data type
 */
 
-HIST HIST_new(void); 
+HIST HIST_new(void);
 
 /* 
    HIST_new_n - return a new, cleard histogram data type able to track
@@ -99,7 +99,6 @@ HIST HIST_new_n(int max_outstanding);
 /* 
    HIST_clear - reset a histogram by clearing all totals to zero
 */
-
 
 void HIST_clear(HIST h);
 
@@ -129,11 +128,11 @@ void HIST_report(HIST h);
 */
 
 #ifdef HAVE_GETHRTIME
-void HIST_timestamp(hrtime_t *timestamp);
+void HIST_timestamp(hrtime_t * timestamp);
 #elif defined(HAVE_GET_HRT)
-void HIST_timestamp(hrt_t *timestamp);
+void HIST_timestamp(hrt_t * timestamp);
 #elif defined(WIN32)
-void HIST_timestamp(LARGE_INTEGER *timestamp);
+void HIST_timestamp(LARGE_INTEGER * timestamp);
 #else
 void HIST_timestamp(struct timeval *timestamp);
 #endif
@@ -156,14 +155,13 @@ void HIST_timestamp_stop_add(HIST h);
   timestamps
 */
 #ifdef HAVE_GETHRTIME
-int delta_micro(hrtime_t *begin, hrtime_t *end);
+int delta_micro(hrtime_t * begin, hrtime_t * end);
 #elif defined(HAVE_GET_HRT)
-int delta_micro(hrt_t *begin, hrt_t *end);
+int delta_micro(hrt_t * begin, hrt_t * end);
 #elif defined(WIN32)
-int delta_micro(LARGE_INTEGER *begin, LARGE_INTEGER *end);
+int delta_micro(LARGE_INTEGER * begin, LARGE_INTEGER * end);
 #else
 int delta_micro(struct timeval *begin, struct timeval *end);
 #endif
 
 #endif
-

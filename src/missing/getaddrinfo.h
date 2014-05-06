@@ -40,13 +40,12 @@
 #include <winsock2.h>
 #ifdef DO_IPV6
 #include <ws2tcpip.h>
-#endif  /* DO_IPV6 */
+#endif /* DO_IPV6 */
 #include <windows.h>
 #else
 #include <sys/socket.h>
 #include <netdb.h>
 #endif
-
 
 /********************************************************************/
 /*
@@ -208,14 +207,14 @@
  * struct addrinfo.
  */
 struct addrinfo {
-    int ai_flags;
-    int ai_family;
-    int ai_socktype;
-    int ai_protocol;
-    socklen_t ai_addrlen;
-    char *ai_canonname;
-    struct sockaddr *ai_addr;
-    struct addrinfo *ai_next;
+	int ai_flags;
+	int ai_family;
+	int ai_socktype;
+	int ai_protocol;
+	socklen_t ai_addrlen;
+	char *ai_canonname;
+	struct sockaddr *ai_addr;
+	struct addrinfo *ai_next;
 };
 
 /*
@@ -225,9 +224,9 @@ struct addrinfo {
 const char *gai_strerror(int);
 void freeaddrinfo(struct addrinfo *);
 int getaddrinfo(const char *, const char *, const struct addrinfo *,
-    struct addrinfo **);
-int getnameinfo(const struct sockaddr *, socklen_t, char *, 
-    socklen_t, char *, socklen_t, int);
+				struct addrinfo **);
+int getnameinfo(const struct sockaddr *, socklen_t, char *,
+				socklen_t, char *, socklen_t, int);
 #else
 const char *gai_strerror();
 void freeaddrinfo();
