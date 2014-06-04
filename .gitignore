@@ -15,3 +15,11 @@ doc/examples/Makefile
 src/Makefile
 src/missing/Makefile
 src/missing/m4/Makefile
+
+Makefile.in
+aclocal.m4
+doc/Makefile.in
+doc/examples/Makefile.in
+src/Makefile.in
+src/missing/Makefile.in
+src/missing/m4/Makefile.in
