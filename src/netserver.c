@@ -1150,7 +1150,7 @@ void accept_connections()
 
 	while (1) {
 /* No select on Akaros yet */
-#if 0
+#ifndef __ros__
 		FD_ZERO(&write_fds);
 		FD_ZERO(&except_fds);
 		// XXX want a listen_list of one thing

@@ -908,6 +908,7 @@ void gettimeofday(struct timeval *tv, struct timezone *not_used)
 }
 #endif /* WIN32 */
 
+#if __ros__
 /* Akaros version, pairs with start_timer() */
 /* Ghetto global awaiter, assuming one uthread. */
 #include <alarm.h>
@@ -918,7 +919,7 @@ void stop_timer(void)
 	unset_alarm(&waiter);
 }
 
-#if 0
+#else
  /* this routine will disable any running timer */
 void stop_timer()
 {
@@ -1113,6 +1114,8 @@ void emulate_alarm(int seconds)
 
 #endif /* WIN32 */
 
+
+#ifdef __ros__
 static void alarm_times_up(struct alarm_waiter *awaiter)
 {
 	times_up = 1;
@@ -1128,7 +1131,7 @@ void start_timer(int time)
 	set_alarm(&waiter);
 }
 
-#if 0
+#else
 void start_timer(int time)
 {
 
@@ -2191,7 +2194,7 @@ void shutdown_control()
 	   thing and not have a problem ;-) */
 
 // No select
-#if 0
+#ifndef __ros__
 	FD_ZERO(&readfds);
 	FD_SET(netlib_control, &readfds);
 	timeout.tv_sec = 60;	/* wait one minute then punt */
@@ -2621,7 +2624,7 @@ int recv_request_timed_n(int n, int seconds)
 	do {
 
 		// No select
-#if 0
+#ifndef __ros__
 		FD_ZERO(&readfds);
 		FD_SET(server_sock, &readfds);
 		if (select(FD_SETSIZE,
@@ -2773,7 +2776,7 @@ void recv_response_timed_n(int addl_time, int n)
 	}
 
 	// No select
-#if 0
+#ifndef __ros__
 	/* we only select once. it is assumed that if the response is split
 	   (which should not be happening, that we will receive the whole
 	   thing and not have a problem ;-) */
@@ -2981,7 +2984,7 @@ void libmain()
 
 void get_sock_buffer(SOCKET sd, enum sock_buffer which, int *effective_sizep)
 {
-#if 0
+#ifndef __ros__
 #ifdef SO_SNDBUF
 	int optname = (which == SEND_BUFFER) ? SO_SNDBUF : SO_RCVBUF;
 	netperf_socklen_t sock_opt_len;
@@ -3757,7 +3760,7 @@ float calibrate_remote_cpu()
 int msec_sleep(int msecs)
 {
 // No select
-#if 0
+#ifndef __ros__
 	int rval;
 
 	struct timeval timeout;
@@ -4767,7 +4770,9 @@ void display_confidence()
 			100.0 * (interval - rem_cpu_confid));
 }
 
+#ifdef __ros__
 unsigned int sleep(unsigned int sec)
 {
 	uthread_sleep(sec);
 }
+#endif
