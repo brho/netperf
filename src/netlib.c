@@ -1119,10 +1119,13 @@ void emulate_alarm(int seconds)
 static void alarm_times_up(struct alarm_waiter *awaiter)
 {
 	times_up = 1;
+	wmb();
+	alarm_abort_sysc(awaiter);
 }
 
-/* Akaros version of start timer.  This will trigger times_up, which is what we
- * think the users of start_timer() wanted.  waiter is a global, see above. */
+/* Akaros version of start timer.  This will trigger times_up and abort any
+ * pending syscalls, which is what we think the users of start_timer() wanted.
+ * waiter is a global, see above. */
 void start_timer(int time)
 {
 	init_awaiter(&waiter, alarm_times_up);
