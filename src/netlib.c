@@ -2807,6 +2807,7 @@ void recv_response_timed_n(int addl_time, int n)
 	}
 #endif
 
+again:
 	while ((tot_bytes_recvd != buflen) &&
 		   ((bytes_recvd = recv(netlib_control, buf, bytes_left, 0)) > 0)) {
 		tot_bytes_recvd += bytes_recvd;
@@ -2827,6 +2828,13 @@ void recv_response_timed_n(int addl_time, int n)
 	}
 
 	if (bytes_recvd == SOCKET_ERROR) {
+		static int once = 0;
+		/* somewhat hacky, if we failed just try again once.  not sure about the
+		 * underlying problem. */
+		if (!once) {
+			once++;
+			goto again;
+		}
 		perror("recv_response");
 		exit(1);
 	}
