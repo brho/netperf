@@ -721,7 +721,7 @@ extern HANDLE WinTimer;
 #include <libperfstat.h>
 #endif
 
-#ifdef __ros__
+#ifdef __akaros__
 /* hack in the akaros uthread_sleep */
 unsigned int sleep(unsigned int sec);
 #endif

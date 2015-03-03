@@ -1115,7 +1115,7 @@ void emulate_alarm(int seconds)
 #endif /* WIN32 */
 
 
-#ifdef __ros__
+#ifdef __akaros__
 static void alarm_times_up(struct alarm_waiter *awaiter)
 {
 	times_up = 1;
@@ -4781,7 +4781,7 @@ void display_confidence()
 			100.0 * (interval - rem_cpu_confid));
 }
 
-#ifdef __ros__
+#ifdef __akaros__
 unsigned int sleep(unsigned int sec)
 {
 	uthread_sleep(sec);

@@ -172,7 +172,7 @@ char netserver_id[] = "\
 #define DEBUG_LOG_FILE DEBUG_LOG_FILE_DIR"netserver.debug"
 #endif
 
-#ifdef ros
+#ifdef __akaros__
 #include <ros/bits/syscall.h>
 #define MAX_PATH MAX_PATH_LEN
 #endif
