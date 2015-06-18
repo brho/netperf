@@ -911,8 +911,8 @@ void gettimeofday(struct timeval *tv, struct timezone *not_used)
 #if __ros__
 /* Akaros version, pairs with start_timer() */
 /* Ghetto global awaiter, assuming one uthread. */
-#include <alarm.h>
-#include <uthread.h>
+#include <benchutil/alarm.h>
+#include <parlib/uthread.h>
 struct alarm_waiter waiter;
 void stop_timer(void)
 {
