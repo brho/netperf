@@ -1,4 +1,4 @@
 Rather than deal with Config Hell, just build this for Linux with a few slight mods.
 
 You can tail -1 this file and pipe to sh and it works.
-./configure --host x86_64-ucb-akaros  enable_rtlookup=none enable_drvlookup=none enable_omni=no LIBS="-lbenchutil"
+./configure --host x86_64-ucb-akaros  enable_rtlookup=none enable_drvlookup=none enable_omni=no
